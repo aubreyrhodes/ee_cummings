@@ -1,5 +1,8 @@
 require "ee_cummings/version"
+require "ee_cummings/configuration"
+require "ee_cummings/values"
 
 module EECummings
-  # Your code goes here...
+  extend Configuration
+  extend Values
 end
