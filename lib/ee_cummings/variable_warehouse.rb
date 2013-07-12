@@ -1,15 +1,22 @@
 module EECummings
   class VariableWarehouse
-    attr_reader :variable_source
+    attr_reader :variable_source, :errors, :validator
 
-    def initialize(variable_source = VariableSource.new)
+    def initialize(variable_source = VariableSource.new, validator = VariableValidator.new)
       @variable_source = variable_source
+      @validator = validator
       @variables = {}
+      @errors = []
     end
 
     def load_variables_from_registry(registry)
       registry.variables.each do |var|
-        @variables[var.name] = variable_source.get_value(var.name)
+        value = variable_source.get_value(var.name)
+        if validator.is_valid?(var, value)
+          @variables[var.name] = value
+        else
+          @errors << var.name
+        end
       end
     end
 

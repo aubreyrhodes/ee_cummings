@@ -4,6 +4,9 @@ module EECummings
       variable_list = variable_registry
       yield variable_list
       variable_warehouse.load_variables_from_registry(variable_list)
+      if variable_warehouse.errors.length > 0
+        raise_errors(variable_warehouse.errors)
+      end
       self.warehouse = variable_warehouse
     end
 
@@ -23,6 +26,10 @@ module EECummings
 
     def variable_warehouse
       @variable_warehouse ||= EECummings::VariableWarehouse.new
+    end
+
+    def raise_errors(errors)
+      raise MisconfiguredVariable.new "The following variables are missing or misconfigured: #{ errors.join(',') }"
     end
   end
 end

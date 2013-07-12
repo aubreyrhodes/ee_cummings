@@ -1,9 +1,9 @@
 require 'ee_cummings/configuration'
-require 'ee_cummings/variable_registry'
+require 'ee_cummings/misconfigured_variable'
 
 describe EECummings::Configuration do
   let(:variable_registry){ double }
-  let(:variable_warehouse){ double }
+  let(:variable_warehouse){ double(errors: []) }
 
   subject{ Object.new.extend(EECummings::Configuration) }
 
@@ -27,5 +27,10 @@ describe EECummings::Configuration do
   it 'sets the objects warehouse' do
     subject.should_receive(:warehouse=).with(variable_warehouse)
     subject.configure{}
+  end
+
+  it 'raises an error if there are misconfigured variables' do
+    variable_warehouse.stub(:errors).and_return(['bad_variable'])
+    expect{ subject.configure{} }.to raise_error(EECummings::MisconfiguredVariable)
   end
 end

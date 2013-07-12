@@ -17,5 +17,15 @@ describe 'Managing Environment Variables' do
 
       expect(EECummings.ee_cummings_test_var).to eq(variable_value)
     end
+
+    it 'throws an exception if a configured variable is missing' do
+      expect do
+        EECummings.configure do |c|
+          c.variable do |var|
+            var.name = 'MISSING_VARIABLE'
+          end
+        end
+      end.to raise_error(EECummings::MisconfiguredVariable)
+    end
   end
 end
