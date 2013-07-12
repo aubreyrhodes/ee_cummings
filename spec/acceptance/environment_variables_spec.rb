@@ -5,7 +5,8 @@ describe 'Managing Environment Variables' do
     let(:variable_value){ 'test' }
 
     before do
-      ENV['EE_CUMMINGS_TEST_VAR'] = variable_value
+      EECummings.cleanup
+      ENV['EE_CUMMINGS_TEST_VAR'] ||= variable_value
     end
 
     it 'allows a user to require an environment variable' do
@@ -22,7 +23,21 @@ describe 'Managing Environment Variables' do
       expect do
         EECummings.configure do |c|
           c.variable do |var|
+            var.name = 'EE_CUMMINGS_TEST_VAR'
+          end
+          c.variable do |var|
             var.name = 'MISSING_VARIABLE'
+          end
+        end
+      end.to raise_error(EECummings::MisconfiguredVariable)
+    end
+
+    it 'throws an exception if a configured variable does not match the expected regex' do
+      expect do
+        EECummings.configure do |c|
+          c.variable do |var|
+            var.name = 'EE_CUMMINGS_TEST_VAR'
+            var.regex = /bad_regex/
           end
         end
       end.to raise_error(EECummings::MisconfiguredVariable)

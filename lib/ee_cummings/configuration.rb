@@ -18,6 +18,11 @@ module EECummings
       @variable_warehouse = warehouse
     end
 
+    def cleanup
+      @variable_registry = nil
+      @variable_warehouse = nil
+    end
+
     private
 
     def variable_registry

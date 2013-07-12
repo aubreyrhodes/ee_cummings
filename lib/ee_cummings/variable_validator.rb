@@ -1,7 +1,7 @@
 module EECummings
   class VariableValidator
     def is_valid?(definition, value)
-      !value.nil?
+      value =~ definition.regex
     end
   end
 end
