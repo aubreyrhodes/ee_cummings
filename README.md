@@ -47,3 +47,14 @@ end
 EECummings.api_secret
 EECummings.api_key
 ```
+
+## Notes
+
+If you are using this gem on a rails app deployed to heroku,
+asset compilation will fail as ENV variables are not accessible while
+the assets are compiled. A work around for this is to enable an experimental
+feature of heroku for your app which exposes the variables during asset compliation.
+
+```
+heroku labs:enable user-env-compile
+```
