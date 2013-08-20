@@ -14,7 +14,7 @@ gem install ee_cummings
 ```
 or add the following to a Gemfile
 ```
-gem 'ee_commings'
+gem 'ee_cummings'
 ```
 
 ## Usage
